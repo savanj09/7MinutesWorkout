@@ -1,5 +1,7 @@
 package com.minutesworkout
 
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -28,6 +30,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var tts: TextToSpeech? = null
 
+    private var player:MediaPlayer? =null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +55,16 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     }
     private fun setUpRestView(){
+        try {
+          val soundURI = Uri.parse("android.resource://com.minutesworkout/" +R.raw.press_start)
+          player =MediaPlayer.create(applicationContext,soundURI)
+          player?.isLooping = false
+          player?.start()
+
+        }
+        catch (e:Exception){
+            e.printStackTrace()
+        }
         binding?.flRestView?.visibility =View.VISIBLE
         binding?.tvTitle?.visibility =View.VISIBLE
         binding?.upcomingLabel?.visibility = View.VISIBLE
@@ -135,7 +149,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+
 
         if (restTimer!=null){
             restTimer?.cancel()
@@ -152,6 +166,11 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts!!.shutdown()
 
         }
+
+        if(player!=null){
+            player!!.stop()
+        }
+        super.onDestroy()
         binding = null
     }
 
