@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Visibility
 import com.minutesworkout.databinding.ActivityExerciseBinding
 import java.util.Locale
@@ -32,6 +33,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var player:MediaPlayer? =null
 
+    private var exerciseAdapter: ExerciseStatusAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +53,17 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         setUpRestView()
+        setupExerciseStatusRecyclerView()
 
        // setContentView(R.layout.activity_exercise)
 
+    }
+
+    private fun setupExerciseStatusRecyclerView(){
+        binding?.rvExcerciseStatus?.layoutManager =
+            LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+           exerciseAdapter =ExerciseStatusAdapter(exerciseList!!)
+        binding?.rvExcerciseStatus?.adapter = exerciseAdapter
     }
     private fun setUpRestView(){
         try {
@@ -112,6 +123,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExercisePosition++
+
+                exerciseList!![currentExercisePosition].setIsSelected(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 setUpExerciseView()
             }
 
@@ -129,6 +143,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
+                exerciseList!![currentExercisePosition].setIsSelected(false)
+                exerciseList!![currentExercisePosition].setIsCompleted(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 if (currentExercisePosition<exerciseList?.size!!-1){
                     setUpRestView()
                 }
