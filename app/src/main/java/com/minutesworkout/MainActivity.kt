@@ -20,9 +20,12 @@ class MainActivity : AppCompatActivity() {
         binding?.flstart?.setOnClickListener {
            val intent = Intent(this,ExerciseActivity::class.java)
             startActivity(intent)
-            Toast.makeText(this,"Here we will start Excersise", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,"Here we will start Excersise", Toast.LENGTH_LONG).show()
         }
-
+        binding?.flBMI?.setOnClickListener {
+            val intent = Intent(this,BMIActivity::class.java)
+            startActivity(intent)
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
