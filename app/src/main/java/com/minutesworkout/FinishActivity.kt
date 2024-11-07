@@ -29,4 +29,9 @@ class FinishActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun addDatetoDatabase(){
+
+
+    }
 }
